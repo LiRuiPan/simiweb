@@ -1,0 +1,7 @@
+.idea
+data
+.txt
+*.pyc
+secret.py
+.md
+__pycache__
