@@ -40,3 +40,16 @@ def html_response(body, headers=None):
     header = formatted_header(headers)
     r = header + '\r\n' + body
     return r.encode()
+
+
+def redirect(url, headers=None):
+    h = {
+        'Location': url,
+    }
+    if headers is None:
+        headers = h
+    else:
+        headers.update(h)
+    header = formatted_header(headers, 302)
+    r = header + '\r\n'
+    return r.encode()
