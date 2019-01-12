@@ -1,4 +1,5 @@
 .idea
+data
 log.txt
 *.pyc
 secret.py
