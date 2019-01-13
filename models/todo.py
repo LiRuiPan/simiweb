@@ -25,3 +25,16 @@ class Todo(Model):
         t.updated_time = t.created_time
         t.save()
         return t
+
+    @classmethod
+    def update(cls, data_id, **kwargs):
+        t = cls.find_by(id=data_id)
+
+        for k, v in kwargs.items():
+            if hasattr(t, k):
+                setattr(t, k, v)
+
+        t.updated_time = format_time(time.time())
+
+        t.save()
+        return t

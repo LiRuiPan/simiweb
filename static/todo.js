@@ -17,13 +17,22 @@ var apiTodoDelete = function(todo_id, callback) {
     ajax('GET', path, '', callback)
 }
 
+// 更新todo
+var apiTodoUpdate = function(form, callback) {
+    var path = '/api/todo/update'
+    ajax('POST', path, form, callback)
+}
+
 // todo模板
 var todoTemplate = function(todo) {
     var t = `
         <div class="todo-cell" data-id="${todo.id}">
             <span class="todo-content">${todo.content}</span>
-            <span>创建时间：${todo.created_time}</span>
-            <span>更新时间：${todo.updated_time}</span>
+            <br>
+            创建时间：<span>${todo.created_time}</span>
+            <br>
+            更新时间：<span class="todo-updated_time">${todo.updated_time}</span>
+            <br>
             <button class="todo-edit">编辑</button>
             <button class="todo-delete">完成</button>
         </div>
@@ -37,6 +46,23 @@ var insertTodo = function(todo) {
     // 插入 todo-list
     var todoList = e('#id-todo-list')
     todoList.insertAdjacentHTML('beforeend', todoCell)
+}
+
+// 更新todo的模板
+var todoUpdateTemplate = function(content) {
+    var t = `
+        <div class="todo-update-form">
+            <input class="todo-update-content" value="${content}">
+            <button class="todo-update">更新</button>
+        </div>
+    `
+    return t
+}
+
+// 插入更新todo的模板
+var insertUpdateForm = function(content, todoCell) {
+    var todoUpdateForm = todoUpdateTemplate(content)
+    todoCell.insertAdjacentHTML('beforeend', todoUpdateForm)
 }
 
 // 加载所有todo
@@ -95,10 +121,69 @@ var bindEventTodoDelete = function() {
     }
 })}
 
+// 监听编辑事件
+var bindEventTodoEdit = function() {
+    var todoList = e('#id-todo-list')
+    todoList.addEventListener('click', function(event) {
+    log(event)
+    var self = event.target
+    log('被点击的元素', self)
+    if (self.classList.contains('todo-edit')) {
+        log('点到了编辑按钮')
+        var todoCell = self.closest('.todo-cell')
+        var todoId = todoCell.dataset['id']
+        var todoSpan = e('.todo-content', todoCell)
+        var content = todoSpan.innerText
+        log('todo edit', todoId, content)
+        // 插入编辑输入框
+        insertUpdateForm(content, todoCell)
+    } else {
+        log('点到了 todo cell')
+    }
+})}
+
+// 监听更新事件
+var bindEventTodoUpdate = function() {
+    var todoList = e('#id-todo-list')
+    todoList.addEventListener('click', function(event) {
+    log(event)
+    var self = event.target
+    log('被点击的元素', self)
+    if (self.classList.contains('todo-update')) {
+        log('点到了更新按钮')
+        var todoCell = self.closest('.todo-cell')
+        var todoId = todoCell.dataset['id']
+        var todoInput = e('.todo-update-content', todoCell)
+        var content = todoInput.value
+        log('todo update', todoId, content)
+        var form = {
+            id: todoId,
+            content: content,
+        }
+
+        apiTodoUpdate(form, function(todo) {
+            log('apiTodoUpdate', todo)
+
+            var todo_content = e('.todo-content', todoCell)
+            todo_content.innerText = todo.content
+            var todo_updated = e('.todo-updated_time', todoCell)
+            todo_updated.innerText = todo.updated_time
+
+            var updateForm = e('.todo-update-form', todoCell)
+            updateForm.remove()
+
+        })
+    } else {
+        log('点到了 todo cell')
+    }
+})}
+
 // 监听事件
 var bindEvents = function() {
     bindEventTodoAdd()
     bindEventTodoDelete()
+    bindEventTodoEdit()
+    bindEventTodoUpdate()
 }
 
 var __main = function() {

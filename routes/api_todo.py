@@ -36,10 +36,20 @@ def delete(request):
     return json_response(d)
 
 
+@login_required
+def update(request):
+    form = request.json()
+    todo_id = int(form['id'])
+    content = form['content']
+    t = Todo.update(todo_id, content=content)
+    return json_response(t.json())
+
+
 def route_dict():
     d = {
         '/api/todo/all': all,
         '/api/todo/add': add,
         '/api/todo/delete': delete,
+        '/api/todo/update': update,
     }
     return d
