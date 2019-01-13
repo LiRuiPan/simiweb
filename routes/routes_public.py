@@ -1,6 +1,7 @@
 from routes import (
     template,
-    html_response
+    html_response,
+    current_user,
 )
 
 
@@ -8,9 +9,9 @@ def index(request):
     """
     主页的处理函数, 返回主页的响应
     """
-    body = template('index.html')
-    r = html_response(body)
-    return r
+    u = current_user(request)
+    body = template('index.html', username=u.username)
+    return html_response(body)
 
 
 def static(request):

@@ -34,17 +34,27 @@ class User(Model):
     def salted_password(password, salt='$!@><?>HUI&DWQa`'):
         """$!@><?>HUI&DWQa`"""
         salted = password + salt
-        hash = hashlib.sha256(salted.encode()).hexdigest()
-        return hash
+        hashed = hashlib.sha256(salted.encode()).hexdigest()
+        return hashed
 
     @classmethod
     def register(cls, form):
-        valid = len(form['username']) > 5 and len(form['password']) > 5
+        valid = len(form['username']) > 4 and len(form['password']) > 4
         if valid:
             form['password'] = cls.salted_password(form['password'])
             u = User.new(form)
-            result = '注册成功'
+            result = '注册成功，请登录'
             return u, result
         else:
             result = '用户名或者密码长度必须大于5'
             return User.guest(), result
+
+    @classmethod
+    def login(cls, form):
+        salted = cls.salted_password(form['password'])
+        u = User.find_by(username=form['username'], password=salted)
+        if u is not None:
+            result = '登录成功'
+        else:
+            result = '用户名或者密码错误'
+        return u, result
