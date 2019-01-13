@@ -2,7 +2,7 @@ import json
 
 
 # 响应错误请求
-def error(code=404):
+def error(request, code=404):
     """
     根据 code 返回不同的错误响应
     目前只有 404
