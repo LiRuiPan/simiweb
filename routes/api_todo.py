@@ -26,9 +26,20 @@ def add(request):
     return json_response(t.json())
 
 
+@login_required
+def delete(request):
+    todo_id = int(request.query['id'])
+    Todo.delete(todo_id)
+    d = dict(
+        message="成功删除 todo"
+    )
+    return json_response(d)
+
+
 def route_dict():
     d = {
         '/api/todo/all': all,
         '/api/todo/add': add,
+        '/api/todo/delete': delete,
     }
     return d

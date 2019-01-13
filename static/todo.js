@@ -11,6 +11,12 @@ var apiTodoAdd = function(form, callback) {
     ajax('POST', path, form, callback)
 }
 
+// 删除todo
+var apiTodoDelete = function(todo_id, callback) {
+    var path = `/api/todo/delete?id=${todo_id}`
+    ajax('GET', path, '', callback)
+}
+
 // todo模板
 var todoTemplate = function(todo) {
     var t = `
@@ -67,9 +73,32 @@ var bindEventTodoAdd = function() {
     })
 }
 
+// 监听删除事件
+var bindEventTodoDelete = function() {
+    var todoList = e('#id-todo-list')
+    todoList.addEventListener('click', function(event) {
+    log(event)
+    var self = event.target
+    log('被点击的元素', self)
+    // classList 属性保存了元素所有的 class
+    if (self.classList.contains('todo-delete')) {
+        log('点到了删除按钮')
+        todoId = self.parentElement.dataset['id']
+        apiTodoDelete(todoId, function(r) {
+            log('apiTodoDelete', r.message)
+            // 删除 self 的父节点
+            self.parentElement.remove()
+            alert(r.message)
+        })
+    } else {
+        log('点到了 todo cell')
+    }
+})}
+
 // 监听事件
 var bindEvents = function() {
     bindEventTodoAdd()
+    bindEventTodoDelete()
 }
 
 var __main = function() {
