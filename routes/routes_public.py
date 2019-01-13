@@ -1,8 +1,8 @@
 from routes import (
     template,
     html_response,
-    current_user,
 )
+from routes.helper import current_user
 
 
 def index(request):

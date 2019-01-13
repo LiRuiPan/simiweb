@@ -26,6 +26,7 @@ class Session(Model):
         self.user_id = form['user_id']
         self.expired_time = form.get('expired_time', time.time() + 3600)
 
+    # 构造session
     @classmethod
     def make(cls, user_id):
         session_id = random_string()
@@ -36,6 +37,7 @@ class Session(Model):
         s = cls.new(form)
         return s
 
+    # 过期判断
     def expired(self):
         now = time.time()
         result = self.expired_time < now

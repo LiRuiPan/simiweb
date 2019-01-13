@@ -36,15 +36,13 @@ def process_request(connection):
         connection.sendall(response)
 
 
+# 启动服务器
 def run(host, port):
-    """
-    启动服务器
-    """
     log('开始运行于', 'http://{}:{}'.format(host, port))
     with socket.socket() as s:
         s.bind((host, port))
         # 监听 接受 读取请求数据 解码成字符串
-        s.listen()
+        s.listen(1024)
         # 无限循环来处理请求
         while True:
             connection, address = s.accept()

@@ -1,9 +1,5 @@
-from utils import log
-from models.user import User
-from models.session import Session
-
-
-def error(request, code=404):
+# 错误请求响应
+def error(code=404):
     """
     根据 code 返回不同的错误响应
     目前只有 404
@@ -14,6 +10,7 @@ def error(request, code=404):
     return e.get(code, b'')
 
 
+# 读取模板
 def template(name, **kw):
     """
     根据名字读取 templates 文件夹里的一个文件并返回
@@ -27,6 +24,7 @@ def template(name, **kw):
         return r
 
 
+# 格式化响应头
 def formatted_header(headers, code=200):
     header = 'HTTP/1.1 {} OK \r\n'.format(code)
     header += ''.join([
@@ -35,6 +33,7 @@ def formatted_header(headers, code=200):
     return header
 
 
+# 构造响应
 def html_response(body, headers=None):
     h = {
         'Content-Type': 'text/html',
@@ -48,6 +47,7 @@ def html_response(body, headers=None):
     return r.encode()
 
 
+# 重定向
 def redirect(url, headers=None):
     h = {
         'Location': url,
@@ -59,17 +59,3 @@ def redirect(url, headers=None):
     header = formatted_header(headers, 302)
     r = header + '\r\n'
     return r.encode()
-
-
-def current_user(request):
-    if 'session_id' in request.cookies:
-        session_id = request.cookies['session_id']
-        s = Session.find_by(session_id=session_id)
-        if s is None or s.expired():
-            return User.guest()
-        else:
-            user_id = s.user_id
-            u = User.find_by(id=user_id)
-            return u
-    else:
-        return User.guest()
