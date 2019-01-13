@@ -93,6 +93,20 @@ class Model(object):
 
         return models
 
+    @classmethod
+    def all_json(cls):
+        ms = cls.all()
+        # 转换为 dict 格式
+        js = [t.json() for t in ms]
+        return js
+
+    def json(self):
+        """
+        返回当前 model 的字典表示
+        """
+        d = self.__dict__
+        return d
+
     def save(self):
         """
         用 all 方法读取文件中的所有 model 并生成一个 list
@@ -124,4 +138,4 @@ class Model(object):
         classname = self.__class__.__name__
         properties = ['{}: ({})'.format(k, v) for k, v in self.__dict__.items()]
         s = '\n'.join(properties)
-        return '< {}\n{} >\n'.format(classname, s) 
+        return '< {}\n{} >\n'.format(classname, s)

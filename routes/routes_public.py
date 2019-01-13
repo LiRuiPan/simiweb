@@ -21,7 +21,7 @@ def static(request):
     filename = request.query['file']
     path = 'static/{}'.format(filename)
     with open(path, 'rb') as f:
-        header = b'HTTP/1.x 200 OK\r\nContent-Type: image/gif\r\n\r\n'
+        header = b'HTTP/1.x 200 OK\r\n\r\n'
         img = header + f.read()
         return img
 
