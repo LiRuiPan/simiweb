@@ -45,16 +45,16 @@ class Model(object):
         return m
 
     @classmethod
-    def delete(cls, id):
+    def delete(cls, data_id):
         ms = cls.all()
         for i, m in enumerate(ms):
-            if m.id == id:
+            if m.id == data_id:
                 del ms[i]
                 break
                 
-        l = [m.__dict__ for m in ms]
+        d = [m.__dict__ for m in ms]
         path = cls.db_path()
-        save(l, path)
+        save(d, path)
 
     @classmethod
     def all(cls):
@@ -116,12 +116,12 @@ class Model(object):
                     models[i] = self
 
         # 保存
-        l = [m.__dict__ for m in models]
+        d = [m.__dict__ for m in models]
         path = self.db_path()
-        save(l, path)
+        save(d, path)
 
     def __repr__(self):
         classname = self.__class__.__name__
         properties = ['{}: ({})'.format(k, v) for k, v in self.__dict__.items()]
         s = '\n'.join(properties)
-        return '< {}\n{} >\n'.format(classname, s)
+        return '< {}\n{} >\n'.format(classname, s) 

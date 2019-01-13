@@ -6,6 +6,7 @@ from utils import log
 from routes import error
 from routes.routes_public import route_dict as public_routes
 from routes.routes_user import route_dict as user_routes
+from routes.routes_todo import route_dict as todo_routes
 
 
 def response_for_path(request):
@@ -17,6 +18,7 @@ def response_for_path(request):
     # 注册外部的路由
     r.update(public_routes())
     r.update(user_routes())
+    r.update(todo_routes())
     response = r.get(request.path, error)
     log('request', request, response)
     return response(request)
