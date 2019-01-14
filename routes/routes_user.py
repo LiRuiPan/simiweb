@@ -15,7 +15,8 @@ def login(request):
     if 'session_id' in request.cookies:
         session_id = request.cookies['session_id']
         s = Session.find_by(session_id=session_id)
-        s.delete(s.id)
+        if s is not None:
+            s.delete(s.id)
 
     form = request.form()
     u, result = User.login(form)
