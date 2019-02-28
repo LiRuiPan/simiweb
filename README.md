@@ -20,7 +20,7 @@
 
 **4 流程图**
 
-![流程图](static/struct.jpg)
+![流程图](static/struct.png)
 
 **5 部署**
 
